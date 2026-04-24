@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AliceSolutions | Auditoría con Aprendizaje</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        :root {
+            --primary: #00f2c3;
+            --dark: #1a1a1a;
+            --bg: #f4f7f6;
+            --success: #27ae60;
+            font-size: 18px;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: var(--bg);
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        #container {
+            width: 100%;
+            max-width: 1200px;
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid var(--dark);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .brand h1 {
+            margin: 0;
+            letter-spacing: -1px;
+        }
+
+        .brand span {
+            background: var(--dark);
+            color: var(--primary);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .url-input {
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            width: 400px;
+            outline: none;
+        }
+
+        .url-input:focus {
+            border-color: var(--primary);
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            text-transform: uppercase;
+            font-size: 12px;
+        }
+
+        .btn-audit {
+            background: var(--dark);
+            color: white;
+        }
+
+        .btn-pdf {
+            background: var(--primary);
+            color: var(--dark);
+        }
+
+        .btn-train {
+            background: var(--success);
+            color: white;
+            margin-right: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th {
+            text-align: left;
+            color: #777;
+            font-size: 11px;
+            text-transform: uppercase;
+            padding: 15px;
+            border-bottom: 2px solid #eee;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #f9f9f9;
+        }
+
+        .num-field {
+            text-align: right;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+
+        [contenteditable="true"] {
+            border-radius: 3px;
+            padding: 2px 4px;
+        }
+
+        [contenteditable="true"]:focus {
+            background: #e8fffb;
+            outline: none;
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+
+        .eye-link {
+            color: var(--dark);
+            text-decoration: none;
+            font-size: 18px;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+
+        .eye-link:hover {
+            color: var(--primary);
+            transform: scale(1.2);
+        }
+
+        #loader {
+            display: none;
+            color: var(--primary);
+            background: var(--dark);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="container">
+        <header class="header">
+            <div class="brand">
+                <h1>AliceSolutions</h1>
+                <span>CORE v5.0 | ORGANIC LEARNING MODE</span>
+            </div>
+            <div class="controls">
+                <input type="text" id="urlInput" class="url-input" placeholder="URL de la factura...">
+                <button class="btn-audit" onclick="procesarFactura()">Auditar</button>
+                <button class="btn-pdf" onclick="exportarPDF()">PDF</button>
+            </div>
+        </header>
+
+        <div id="loader">⚡ ALEXANDER-IA RECALIBRANDO ANATOMÍA VISUAL...</div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th width="12%">Fecha</th>
+                    <th width="28%">Emisor / CIF</th>
+                    <th width="15%" style="text-align: right;">Base (€)</th>
+                    <th width="15%" style="text-align: right;">IVA (€)</th>
+                    <th width="15%" style="text-align: right;">Total (€)</th>
+                    <th width="15%">Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+
+    <script>
+        async function procesarFactura() {
+            const input = document.getElementById('urlInput');
+            const url = input.value.trim();
+            if (!url) return alert("Introduce una URL válida");
+
+            document.getElementById('loader').style.display = 'block';
+
+            try {
+                const response = await fetch('http://localhost:5000/procesar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ "url_imagen": url })
+                });
+
+                const data = await response.json();
+                if (data.error) throw new Error(data.error);
+
+                renderRow(data, url);
+                input.value = "";
+            } catch (e) {
+                alert("Error en el Core: " + e.message);
+            } finally {
+                document.getElementById('loader').style.display = 'none';
+            }
+        }
+
+        function renderRow(data, url) {
+    const tr = document.createElement('tr');
+
+    // Función de seguridad para convertir cualquier entrada (número o null) a String
+    const toStr = (val) => (val !== undefined && val !== null) ? String(val) : "";
+
+    const cleanData = {
+        fecha: toStr(data.fecha || '---').trim(),
+        emisor: toStr(data.emisor || 'DESCONOCIDO').trim(),
+        cif: toStr(data.cif || '---').trim(),
+        base: toStr(data.base || '0.00').trim(),
+        iva: toStr(data.iva || '0.00').trim(),
+        total: toStr(data.total || '0.00').trim(),
+        ultima_url: url
+    };
+
+    tr.dataset.ia_original = JSON.stringify(cleanData);
+
+    tr.innerHTML = `
+    <td contenteditable="true">${cleanData.fecha}</td>
+    <td>
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+            <span class="emisor-val" contenteditable="true" style="font-weight: 800;">${cleanData.emisor}</span>
+            <a href="${url}" target="_blank" class="eye-link" title="Ver original">👁️</a>
+        </div>
+        <div class="cif-val" contenteditable="true" style="font-size: 11px; color: #999;">${cleanData.cif}</div>
+    </td>
+    <td contenteditable="true" class="num-field">${cleanData.base}</td>
+    <td contenteditable="true" class="num-field">${cleanData.iva}</td>
+    <td contenteditable="true" class="num-field" style="color:var(--dark)"><strong>${cleanData.total}</strong></td>
+    <td>
+        <div style="display: flex; gap: 5px;">
+            <button class="btn-train" onclick="enviarAprendizaje(this)" title="Entrenar Alexander">✔</button>
+            <button onclick="this.closest('tr').remove()" style="background:none; color:#ccc;">✕</button>
+        </div>
+    </td>
+    `;
+    document.getElementById('tableBody').prepend(tr);
+}
+
+        async function enviarAprendizaje(btn) {
+            const row = btn.closest('tr');
+            const iaDijo = JSON.parse(row.dataset.ia_original);
+
+            // Función de limpieza: quita saltos de línea y el emoji del ojo si se cuela
+            const limpiar = (txt) => txt.replace(/\n/g, " ").replace('👁️', '').trim();
+
+            const correccion = {
+                fecha: limpiar(row.cells[0].innerText),
+                emisor: limpiar(row.querySelector('.emisor-val').innerText),
+                cif: limpiar(row.querySelector('.cif-val').innerText),
+                base: limpiar(row.cells[2].innerText),
+                iva: limpiar(row.cells[3].innerText),
+                total: limpiar(row.cells[4].innerText),
+                ultima_url: iaDijo.ultima_url // Mantenemos la URL para que la IA sepa qué mirar
+            };
+
+            btn.innerText = "...";
+
+            try {
+                const res = await fetch('http://localhost:5000/feedback', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        "error": iaDijo,
+                        "correccion": correccion
+                    })
+                });
+
+                if (res.ok) {
+                    btn.innerText = "OK";
+                    btn.style.background = "#2ecc71";
+                    // Actualizamos el "original" con la corrección para futuras ediciones
+                    row.dataset.ia_original = JSON.stringify(correccion);
+                    setTimeout(() => {
+                        btn.innerText = "✔";
+                        btn.style.background = "var(--success)";
+                    }, 2000);
+                } else {
+                    const errorData = await res.json();
+                    alert("Error de Alexander: " + errorData.error);
+                    btn.innerText = "!";
+                }
+            } catch (e) {
+                console.error("Error de conexión:", e);
+                btn.innerText = "!";
+                alert("No se pudo conectar con el servidor. Asegúrate de que Python esté ejecutándose.");
+            }
+        }
+        function exportarPDF() {
+            const element = document.getElementById('container');
+            const opt = {
+                margin: 0.5,
+                filename: 'Auditoria_Alice.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
+            };
+            html2pdf().set(opt).from(element).save();
+        }
+    </script>
+</body>
+
+</html>
