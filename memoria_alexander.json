@@ -1,17 +1,5 @@
 {
-    "cifs": {
-        "B75729566": "A&J GRUP BCN 2025 S.L.",
-        "543535": "REPSOL S.A.",
-        "X8027204C": "ALICE SOLUTIONS"
-    },
-    "nombres": {
-        "A&J GRUP BCN 2025 S.L.": "B75729566",
-        "REPSOL S.A.": "543535",
-        "ALICE SOLUTIONS": "X8027204C"
-    },
-    "ivas": {
-        "A&J GRUP BCN 2025 S.L.": 21.0,
-        "REPSOL S.A.": 21.0,
-        "ALICE SOLUTIONS": 21.0
-    }
+    "cifs": {},
+    "nombres": {},
+    "ivas": {}
 }
