@@ -1,0 +1,13 @@
+Container-----Una sola maquina en fucnioniamnete
+Stack----Multiples paginas en funcionamiento
+-----------------------------------------------------
+Actualente no queremos subir TODA la applicación a al dominio que nos pasara ismael lo que queremos es 
+pasarle las APIS que tenemos y desde nuestra maquina LOCAL ejecutar todo el proceso no queremos en un ningun momento
+ver el INDEX.HTML esto lo haremos nosotros en local para hacer pruebas. 
+
+Ismael me comenta que esto lo pdoemos hacer con un container todo y que el me pasara un stack apra que pueda ir haciendo pruebas 
+
+Modificar el progama no puede ser que tengamos que pasar el PDF a Imagen esto es muy ineficiente tendriamos que bsucar una forma de que analicie el 
+url de pdf que la pase a XML un sistema de etquetas y que lo lea de esta forma.   
+
+Montar un Stack en una maquina el modelo en otra maq1uina el phyton que llama el modelo y eso que salga a fuera y otra maquina el front 

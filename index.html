@@ -1,327 +1,466 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
-    <title>AliceSolutions | Auditoría con Aprendizaje</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <title>Alexander IA</title>
+
     <style>
-        :root {
-            --primary: #00f2c3;
-            --dark: #1a1a1a;
-            --bg: #f4f7f6;
-            --success: #27ae60;
-            font-size: 18px;
+        * {
+            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Segoe UI', sans-serif;
-            background: var(--bg);
             margin: 0;
-            padding: 40px;
-            display: flex;
-            justify-content: center;
+            padding: 20px;
+            background: #f5f7f8;
+            font-family: Arial, sans-serif;
+            overflow-x: auto;
         }
 
-        #container {
+        .container {
             width: 100%;
-            max-width: 1200px;
             background: #fff;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 20px;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
         }
 
-        .header {
+        .top {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 3px solid var(--dark);
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+            border-bottom: 3px solid #111;
             padding-bottom: 20px;
-            margin-bottom: 30px;
         }
 
-        .brand h1 {
+        h1 {
             margin: 0;
-            letter-spacing: -1px;
+            font-size: 48px;
+            line-height: 1;
         }
 
-        .brand span {
-            background: var(--dark);
-            color: var(--primary);
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 12px;
+        .tag {
+            display: inline-block;
+            margin-top: 10px;
+            background: #111;
+            color: #00ffd0;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 11px;
             font-weight: bold;
         }
 
-        .controls {
+        .controls,
+        .tools,
+        .actions {
             display: flex;
-            gap: 10px;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
-        .url-input {
-            padding: 12px;
+        input {
+            width: 500px;
+            max-width: 100%;
+            padding: 14px;
             border: 2px solid #ddd;
-            border-radius: 6px;
-            width: 400px;
-            outline: none;
-        }
-
-        .url-input:focus {
-            border-color: var(--primary);
+            border-radius: 8px;
+            font-size: 14px;
         }
 
         button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            font-weight: bold;
+            border: 0;
+            border-radius: 8px;
             cursor: pointer;
-            transition: 0.2s;
-            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .audit {
+            background: #111;
+            color: #fff;
+            padding: 14px 18px;
+        }
+
+        .ok,
+        .save {
+            color: #fff;
+            padding: 10px 12px;
             font-size: 12px;
+            min-width: 78px;
         }
 
-        .btn-audit {
-            background: var(--dark);
-            color: white;
+        .ok {
+            background: #2ecc71;
         }
 
-        .btn-pdf {
-            background: var(--primary);
-            color: var(--dark);
+        .save {
+            background: #f39c12;
         }
 
-        .btn-train {
-            background: var(--success);
-            color: white;
-            margin-right: 5px;
+        .delete {
+            background: none;
+            color: #bbb;
+            font-size: 24px;
+            padding: 0 8px;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th {
-            text-align: left;
-            color: #777;
-            font-size: 11px;
-            text-transform: uppercase;
-            padding: 15px;
-            border-bottom: 2px solid #eee;
-        }
-
-        td {
-            padding: 15px;
-            border-bottom: 1px solid #f9f9f9;
-        }
-
-        .num-field {
-            text-align: right;
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
-        }
-
-        [contenteditable="true"] {
-            border-radius: 3px;
-            padding: 2px 4px;
-        }
-
-        [contenteditable="true"]:focus {
-            background: #e8fffb;
-            outline: none;
-            box-shadow: 0 0 0 2px var(--primary);
-        }
-
-        .eye-link {
-            color: var(--dark);
+        .eye {
+            font-size: 20px;
             text-decoration: none;
-            font-size: 18px;
-            transition: 0.2s;
-            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: #f3f3f3;
+            transition: .2s;
         }
 
-        .eye-link:hover {
-            color: var(--primary);
-            transform: scale(1.2);
+        .eye:hover {
+            background: #111;
+            color: #fff;
+            transform: scale(1.05);
         }
 
         #loader {
             display: none;
-            color: var(--primary);
-            background: var(--dark);
-            padding: 15px;
+            background: #111;
+            color: #00ffd0;
+            padding: 14px;
             border-radius: 8px;
-            text-align: center;
             margin-bottom: 20px;
             font-weight: bold;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            min-width: 1200px;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        th {
+            text-align: left;
+            padding: 14px 10px;
+            font-size: 12px;
+            color: #666;
+            border-bottom: 2px solid #eee;
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 18px 10px;
+            border-bottom: 1px solid #f1f1f1;
+            vertical-align: middle;
+        }
+
+        .right {
+            text-align: right;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .big {
+            font-size: 18px;
+            font-weight: bold;
+            word-break: break-word;
+        }
+
+        .money {
+            font-size: 18px;
+            font-family: monospace;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .review {
+            display: inline-block;
+            margin-top: 8px;
+            background: #fff3cd;
+            color: #9a6a00;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        [contenteditable="true"] {
+            display: block;
+            padding: 4px;
+            border-radius: 4px;
+        }
+
+        [contenteditable="true"]:focus {
+            outline: 2px solid #00ffd0;
+            background: #eafffb;
+        }
+
+        @media (max-width: 900px) {
+            h1 {
+                font-size: 36px;
+            }
+
+            .money,
+            .big {
+                font-size: 16px;
+            }
         }
     </style>
 </head>
 
 <body>
+    <div class="container">
 
-    <div id="container">
-        <header class="header">
-            <div class="brand">
-                <h1>AliceSolutions</h1>
-                <span>CORE v5.0 | ORGANIC LEARNING MODE</span>
+        <div class="top">
+            <div>
+                <h1>Alexander IA</h1>
+                <div class="tag">FACTURAS | MEMORIA URL + ID</div>
             </div>
+
             <div class="controls">
-                <input type="text" id="urlInput" class="url-input" placeholder="URL de la factura...">
-                <button class="btn-audit" onclick="procesarFactura()">Auditar</button>
-                <button class="btn-pdf" onclick="exportarPDF()">PDF</button>
+                <input id="urlInput" type="text" placeholder="Pega aquí la URL del PDF...">
+                <button class="audit" onclick="procesar()">AUDITAR</button>
             </div>
-        </header>
+        </div>
 
-        <div id="loader">⚡ ALEXANDER-IA RECALIBRANDO ANATOMÍA VISUAL...</div>
+        <div id="loader">Procesando factura...</div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th width="12%">Fecha</th>
-                    <th width="28%">Emisor / CIF</th>
-                    <th width="15%" style="text-align: right;">Base (€)</th>
-                    <th width="15%" style="text-align: right;">IVA (€)</th>
-                    <th width="15%" style="text-align: right;">Total (€)</th>
-                    <th width="15%">Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="tableBody"></tbody>
-        </table>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nº Factura</th>
+                        <th>Fecha</th>
+                        <th>ID</th>
+                        <th>Categoría</th>
+                        <th class="right">Base</th>
+                        <th class="right">IVA</th>
+                        <th class="right">Total</th>
+                        <th class="center">Acciones</th>
+                    </tr>
+                </thead>
+
+                <tbody id="tbody"></tbody>
+            </table>
+        </div>
+
     </div>
 
     <script>
-        async function procesarFactura() {
-            const input = document.getElementById('urlInput');
-            const url = input.value.trim();
-            if (!url) return alert("Introduce una URL válida");
+        const API = "http://localhost:5000";
 
-            document.getElementById('loader').style.display = 'block';
-
-            try {
-                const response = await fetch('http://localhost:5000/procesar', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ "url_imagen": url })
-                });
-
-                const data = await response.json();
-                if (data.error) throw new Error(data.error);
-
-                renderRow(data, url);
-                input.value = "";
-            } catch (e) {
-                alert("Error en el Core: " + e.message);
-            } finally {
-                document.getElementById('loader').style.display = 'none';
-            }
+        function txt(v) {
+            return v === undefined || v === null ? "" : String(v);
         }
 
-        function renderRow(data, url) {
-    const tr = document.createElement('tr');
+        function clean(v) {
+            return txt(v).replace(/\n/g, " ").trim();
+        }
 
-    // Función de seguridad para convertir cualquier entrada (número o null) a String
-    const toStr = (val) => (val !== undefined && val !== null) ? String(val) : "";
+        function esc(v) {
+            return txt(v)
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;");
+        }
 
-    const cleanData = {
-        fecha: toStr(data.fecha || '---').trim(),
-        emisor: toStr(data.emisor || 'DESCONOCIDO').trim(),
-        cif: toStr(data.cif || '---').trim(),
-        base: toStr(data.base || '0.00').trim(),
-        iva: toStr(data.iva || '0.00').trim(),
-        total: toStr(data.total || '0.00').trim(),
-        ultima_url: url
-    };
-
-    tr.dataset.ia_original = JSON.stringify(cleanData);
-
-    tr.innerHTML = `
-    <td contenteditable="true">${cleanData.fecha}</td>
-    <td>
-        <div style="display: flex; align-items: center; justify-content: space-between;">
-            <span class="emisor-val" contenteditable="true" style="font-weight: 800;">${cleanData.emisor}</span>
-            <a href="${url}" target="_blank" class="eye-link" title="Ver original">👁️</a>
-        </div>
-        <div class="cif-val" contenteditable="true" style="font-size: 11px; color: #999;">${cleanData.cif}</div>
-    </td>
-    <td contenteditable="true" class="num-field">${cleanData.base}</td>
-    <td contenteditable="true" class="num-field">${cleanData.iva}</td>
-    <td contenteditable="true" class="num-field" style="color:var(--dark)"><strong>${cleanData.total}</strong></td>
-    <td>
-        <div style="display: flex; gap: 5px;">
-            <button class="btn-train" onclick="enviarAprendizaje(this)" title="Entrenar Alexander">✔</button>
-            <button onclick="this.closest('tr').remove()" style="background:none; color:#ccc;">✕</button>
-        </div>
-    </td>
-    `;
-    document.getElementById('tableBody').prepend(tr);
-}
-
-        async function enviarAprendizaje(btn) {
-            const row = btn.closest('tr');
-            const iaDijo = JSON.parse(row.dataset.ia_original);
-
-            // Función de limpieza: quita saltos de línea y el emoji del ojo si se cuela
-            const limpiar = (txt) => txt.replace(/\n/g, " ").replace('👁️', '').trim();
-
-            const correccion = {
-                fecha: limpiar(row.cells[0].innerText),
-                emisor: limpiar(row.querySelector('.emisor-val').innerText),
-                cif: limpiar(row.querySelector('.cif-val').innerText),
-                base: limpiar(row.cells[2].innerText),
-                iva: limpiar(row.cells[3].innerText),
-                total: limpiar(row.cells[4].innerText),
-                ultima_url: iaDijo.ultima_url // Mantenemos la URL para que la IA sepa qué mirar
+        function normalizarObjeto(obj) {
+            return {
+                numero_factura: clean(obj.numero_factura),
+                fecha: clean(obj.fecha),
+                id: clean(obj.id),
+                categoria: clean(obj.categoria),
+                base: clean(obj.base),
+                iva: clean(obj.iva),
+                total: clean(obj.total)
             };
+        }
 
-            btn.innerText = "...";
+        function sonIguales(a, b) {
+            return JSON.stringify(normalizarObjeto(a)) === JSON.stringify(normalizarObjeto(b));
+        }
+
+        async function procesar() {
+            const input = document.getElementById("urlInput");
+            const url = input.value.trim();
+
+            if (!url) {
+                alert("Introduce URL");
+                return;
+            }
+
+            document.getElementById("loader").style.display = "block";
 
             try {
-                const res = await fetch('http://localhost:5000/feedback', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                const res = await fetch(`${API}/procesar`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
                     body: JSON.stringify({
-                        "error": iaDijo,
-                        "correccion": correccion
+                        url_imagen: url
                     })
                 });
 
-                if (res.ok) {
-                    btn.innerText = "OK";
-                    btn.style.background = "#2ecc71";
-                    // Actualizamos el "original" con la corrección para futuras ediciones
-                    row.dataset.ia_original = JSON.stringify(correccion);
-                    setTimeout(() => {
-                        btn.innerText = "✔";
-                        btn.style.background = "var(--success)";
-                    }, 2000);
-                } else {
-                    const errorData = await res.json();
-                    alert("Error de Alexander: " + errorData.error);
-                    btn.innerText = "!";
+                const data = await res.json();
+
+                if (data.error) {
+                    throw new Error(data.error);
                 }
+
+                pintar(data, url);
+                input.value = "";
+
             } catch (e) {
-                console.error("Error de conexión:", e);
-                btn.innerText = "!";
-                alert("No se pudo conectar con el servidor. Asegúrate de que Python esté ejecutándose.");
+                alert(e.message);
             }
+
+            document.getElementById("loader").style.display = "none";
         }
-        function exportarPDF() {
-            const element = document.getElementById('container');
-            const opt = {
-                margin: 0.5,
-                filename: 'Auditoria_Alice.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
+
+        function pintar(data, url) {
+            const tr = document.createElement("tr");
+            const original = normalizarObjeto(data);
+
+            tr.dataset.url = url;
+            tr.dataset.original = JSON.stringify(original);
+
+            tr.innerHTML = `
+                <td>
+                    <div class="big numero" contenteditable="true">${esc(data.numero_factura)}</div>
+                </td>
+
+                <td>
+                    <div class="big fecha" contenteditable="true">${esc(data.fecha)}</div>
+                </td>
+
+                <td>
+                    <div class="big id" contenteditable="true">${esc(data.id)}</div>
+                    ${data.needs_review ? '<div class="review">REVISAR</div>' : ''}
+                </td>
+
+                <td>
+                    <div class="big categoria" contenteditable="true">${esc(data.categoria)}</div>
+                </td>
+
+                <td class="right">
+                    <div class="money base" contenteditable="true">${esc(data.base)}</div>
+                </td>
+
+                <td class="right">
+                    <div class="money iva" contenteditable="true">${esc(data.iva)}</div>
+                </td>
+
+                <td class="right">
+                    <div class="money total" contenteditable="true">${esc(data.total)}</div>
+                </td>
+
+                <td class="center">
+                    <div class="tools">
+                        <a href="${esc(url)}" target="_blank" class="eye" title="Ver factura">👁</a>
+
+                        <div class="actions">
+                            <button class="ok" onclick="confirmar(this)">OK</button>
+                            <button class="save" onclick="guardar(this)">Guardar</button>
+                            <button class="delete" onclick="this.closest('tr').remove()">×</button>
+                        </div>
+                    </div>
+                </td>
+            `;
+
+            document.getElementById("tbody").prepend(tr);
+        }
+
+        function leer(row) {
+            return {
+                numero_factura: clean(row.querySelector(".numero").innerText),
+                fecha: clean(row.querySelector(".fecha").innerText),
+                id: clean(row.querySelector(".id").innerText),
+                categoria: clean(row.querySelector(".categoria").innerText),
+                base: clean(row.querySelector(".base").innerText),
+                iva: clean(row.querySelector(".iva").innerText),
+                total: clean(row.querySelector(".total").innerText)
             };
-            html2pdf().set(opt).from(element).save();
+        }
+
+        async function confirmar(btn) {
+            const row = btn.closest("tr");
+            const original = JSON.parse(row.dataset.original || "{}");
+            const actual = leer(row);
+
+            if (sonIguales(original, actual)) {
+                console.log("✅ OK sin cambios: no se guarda en memoria");
+                btn.innerText = "OK";
+                return;
+            }
+
+            await enviarCorreccion(btn, row, actual);
+        }
+
+        async function guardar(btn) {
+            const row = btn.closest("tr");
+            const original = JSON.parse(row.dataset.original || "{}");
+            const actual = leer(row);
+
+            if (sonIguales(original, actual)) {
+                console.log("✅ Guardar sin cambios: no se guarda en memoria");
+                btn.innerText = "Sin cambios";
+
+                setTimeout(() => {
+                    btn.innerText = "Guardar";
+                }, 1200);
+
+                return;
+            }
+
+            await enviarCorreccion(btn, row, actual);
+        }
+
+        async function enviarCorreccion(btn, row, actual) {
+            btn.innerText = "...";
+
+            try {
+                const res = await fetch(`${API}/corregir`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        url: row.dataset.url,
+                        correccion: actual
+                    })
+                });
+
+                const data = await res.json();
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                row.dataset.original = JSON.stringify(normalizarObjeto(actual));
+
+                btn.innerText = "OK";
+
+                setTimeout(() => {
+                    btn.innerText = btn.classList.contains("save") ? "Guardar" : "OK";
+                }, 1200);
+
+            } catch (e) {
+                alert(e.message);
+                btn.innerText = "Error";
+            }
         }
     </script>
 </body>
-
 </html>

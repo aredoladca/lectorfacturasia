@@ -1,0 +1,22 @@
+MAQUINA 1 - IA / MODELO
+Ollama + modelo alexander-ia
+Puerto interno: 11434
+No público, solo accesible desde la API
+
+MAQUINA 2 - BACKEND / PYTHON
+Flask API Alexander
+Puerto público o interno: 5000
+Llama al modelo remoto por HTTP
+
+MAQUINA 3 - FRONT
+HTML / Nginx
+Puerto público: 80 / 443
+Llama a la API Python
+
+
+Quitar nombre solo buscar cif--- Neceistamos cordenadas exactas de donde esta cada dato acuerdate datos importantes a la izquierda
+
+
+
+Opcional 
+Categorias en funci´ñon del tipo de concepto 
